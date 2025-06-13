@@ -48,6 +48,25 @@ if %ERRORLEVEL% neq 0 (
     echo.
 )
 
+:: === User Selection for Strategy ===
+:MENU
+echo Select a strategy:
+echo [1] Strategy 1 (Fixed TTL (Protective))
+echo [2] Strategy 2 (Auto TTL (Fastest))
+set /p choice=Enter your choice (1 or 2): 
+
+:: Check valid
+if "%choice%"=="1" (
+    echo [INFO] Using Strategy 1
+    set strategy=--filter-udp=444-65535 --ipset="%LISTS%list-aws-amazon.txt" --dpi-desync-ttl=8 --dpi-desync-repeats=20 --dpi-desync-fooling=none --dpi-desync-any-protocol=1 --dpi-desync-fake-unknown-udp="%BIN%quic_initial_www_google_com.bin" --dpi-desync=fake --dpi-desync-cutoff=n10
+) else if "%choice%"=="2" (
+    echo [INFO] Using Strategy 2
+    set strategy=--filter-udp=444-65535 --ipset="%LISTS%list-aws-amazon.txt" --dpi-desync=fake --dpi-desync-autottl=2 --dpi-desync-repeats=10 --dpi-desync-any-protocol=1 --dpi-desync-fake-unknown-udp="%BIN%quic_initial_www.google_com.bin" --dpi-desync-cutoff=n2
+) else (
+    echo [ERROR] Invalid choice! Please select a valid option.
+    goto MENU
+)
+
 :: === Launching Application with Parameters ===
 start "zapret_ALT2" /min "%BIN%winws.exe" --wf-tcp=80,443 --wf-udp=443,50000-50100 ^
 --filter-udp=443 --hostlist="%LISTS%list-general.txt" --dpi-desync=fake --dpi-desync-repeats=6 --dpi-desync-fake-quic="%BIN%quic_initial_www_google_com.bin" --new ^
@@ -57,6 +76,7 @@ start "zapret_ALT2" /min "%BIN%winws.exe" --wf-tcp=80,443 --wf-udp=443,50000-501
 --filter-udp=443 --ipset="%LISTS%ipset-cloudflare.txt" --dpi-desync=fake --dpi-desync-repeats=6 --dpi-desync-fake-quic="%BIN%quic_initial_www_google_com.bin" --new ^
 --filter-tcp=80 --ipset="%LISTS%ipset-cloudflare.txt" --dpi-desync=fake,split2 --dpi-desync-autottl=2 --dpi-desync-fooling=md5sig --new ^
 --filter-tcp=443 --ipset="%LISTS%ipset-cloudflare.txt" --dpi-desync=split2 --dpi-desync-split-seqovl=652 --dpi-desync-split-pos=2 --dpi-desync-split-seqovl-pattern="%BIN%tls_clienthello_www_google_com.bin"
---filter-udp=444-65535 --ipset="%LISTS%list-aws-amazon.txt" --dpi-desync=fake --dpi-desync-autottl=2 --dpi-desync-repeats=10 --dpi-desync-fooling=badseq --dpi-desync-any-protocol=1 --dpi-desync-fake-unknown-udp="%BIN%quic_initial_www_google_com.bin"  --dpi-desync-cutoff=n2 --new
+%strategy%
+
 
 exit
