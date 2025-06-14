@@ -1,16 +1,13 @@
-:: Сделано Dronatar для zapret-discord-youtube версии 1.7.2b
-:: За основу взяты general (ALT2) из https://github.com/Flowseal/zapret-discord-youtube/releases
-:: и discord (ALT2) из https://github.com/Flowseal/zapret-discord-youtube/discussions/252#discussioncomment-13422081
-
 @echo off
 chcp 65001 > nul
 :: Set UTF-8 encoding for cmd.exe
-title zapret_ALT6
 
 cd /d "%~dp0"
 
 :: Call other service scripts to check status and updates
 call service.bat status_zapret
+call service.bat check_updates
+echo:
 
 :: Set paths for binaries and lists
 set "BIN=%~dp0bin\"
