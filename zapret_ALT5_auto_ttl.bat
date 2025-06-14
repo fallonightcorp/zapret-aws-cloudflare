@@ -29,7 +29,7 @@ if not defined ipCountBefore set ipCountBefore=0
 echo [INFO] Updating Amazon AWS IP list... (current: %ipCountBefore%)
 
 :: Call Python script to update AWS IP list with timeout
-start /wait /min "" python "%~dp0update-aws.py"
+powershell -ExecutionPolicy Bypass -File "%~dp0update-aws.ps1"
 
 :: Check if the update was successful or timed out
 if %ERRORLEVEL% neq 0 (
