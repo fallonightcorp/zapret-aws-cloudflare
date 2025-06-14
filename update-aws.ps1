@@ -1,36 +1,37 @@
-# Set encoding to UTF-8
+# Set UTF-8 output encoding
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 
-# Path to save the list
+# Path to save the IP list
 $listPath = Join-Path -Path $PSScriptRoot -ChildPath "lists\list-aws-amazon.txt"
 
-# AWS IP ranges URL
-$url = "https://ip-ranges.amazonaws.com/ip-ranges.json"
+# URL to fetch the raw IP list
+$url = "https://raw.githubusercontent.com/V3nilla/IPSets-For-Bypass-in-Russia/refs/heads/main/ipset-amazon.txt"
 
-# Try to fetch data
+# Try to fetch and save the IP list
 try {
     $response = Invoke-WebRequest -Uri $url -TimeoutSec 10 -UseBasicParsing
-    if ($response.StatusCode -eq 200) {
-        $data = $response.Content | ConvertFrom-Json
-        $ips = $data.prefixes | Where-Object { $_.service -eq "AMAZON" } | ForEach-Object { $_.ip_prefix }
 
-        # Ensure directory exists
+    if ($response.StatusCode -eq 200 -and $response.Content) {
+        # Ensure the directory exists
         $dir = Split-Path -Path $listPath
         if (-not (Test-Path $dir)) {
             New-Item -ItemType Directory -Path $dir | Out-Null
         }
 
-        # Write IPs to file
-        $ips | Out-File -FilePath $listPath -Encoding utf8
+        # Save content to file
+        $response.Content | Out-File -FilePath $listPath -Encoding utf8
 
-        Write-Host "[INFO] IP updated: $($ips.Count) IPs added."
-    } else {
-        Write-Host "[ERROR] Failed to fetch data. Error code: $($response.StatusCode)"
+        # Count lines (IPs)
+        $ipCount = ($response.Content -split "`n" | Where-Object { $_.Trim() -ne "" }).Count
+        Write-Host "[INFO] IP list updated successfully. $ipCount IPs saved."
+    }
+    else {
+        Write-Host "[ERROR] Failed to fetch IP list. Status code: $($response.StatusCode)"
         exit 1
     }
 }
 catch {
-    Write-Host "[ERROR] Request failed: Timeout or other error."
-    Write-Host "[INFO] Using the current IP list."
+    Write-Host "[ERROR] Request failed. Timeout or other error."
+    Write-Host "[INFO] Retaining current IP list."
     exit 1
 }
