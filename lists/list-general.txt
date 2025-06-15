@@ -104,3 +104,16 @@ workers.dev
 steamcommunity.com
 twitch.tv
 
+reforger.armaplatform.com
+armaplatform.com
+makearmanotwar.com
+*.bistudio.com
+bistudio.com
+cdn.battleye.com
+www.reforger.armaplatform.com
+ar-gcp-cdn.bistudio.com
+cms-cdn.bistudio.com
+1611202461.rsc.cdn77.org
+battleye.b-cdn.net
+ar-api-origin.bistudio.com.cdn.cloudflare.net
+api-ar-game.bistudio.com
