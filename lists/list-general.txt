@@ -63,6 +63,7 @@ sso.amazonaws.com
 cloudfront.net
 deadbydaylight.com
 deadbydaylight.fandom.com
+bhvrdbd.com
 argotunnel.com
 cfargotunnel.com
 cfl.re
