@@ -5,7 +5,7 @@
 $listPath = Join-Path -Path $PSScriptRoot -ChildPath "lists\list-aws-amazon.txt"
 
 # URL to fetch the raw IP list
-$url = "https://raw.githubusercontent.com/V3nilla/IPSets-For-Bypass-in-Russia/refs/heads/main/ipset-amazon.txt"
+$url = "https://raw.githubusercontent.com/V3nilla/IPSets-For-Bypass-in-Russia/refs/heads/main/ipset-all.txt"
 
 # Try to fetch and save the IP list
 try {
